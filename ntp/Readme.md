@@ -22,5 +22,5 @@ Running the image
 
 The ntp daemon needs to modify the system time of the host kernel. In addition, the daemon tries to lock some of its memory to avoid being swapped. Therefore, we need to provide a few privileges to our container if we want the daemon to control the clock on the host.
 
-    $ docker run --cap-add SYS_TIME --cap-add SYS_RESOURCE --user ntp:ntp jcberthon/ntpd -n
+    $ docker run --cap-add SYS_TIME --cap-add SYS_RESOURCE jcberthon/ntpd -n
 
