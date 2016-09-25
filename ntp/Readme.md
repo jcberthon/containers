@@ -40,4 +40,4 @@ The ntp daemon needs to modify the system time of the host kernel. In addition, 
 
     $ docker run --cap-add SYS_TIME --cap-add SYS_RESOURCE jcberthon/ntpd -g -n
 
-*Note: the container run in foreground mode with this option, so I can check the messages easily and see how to tweak it further. But the next step will be to make it run as a daemon (remove option `-n`).*
+*Note: the container run in foreground mode with this option (option `-n`), this is important for Docker so that it can keep track of the process and knows when the container should exit or not.*
