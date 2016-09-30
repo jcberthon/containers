@@ -9,6 +9,8 @@ I understand that in the end running a NTP server on a Raspberry Pi is not reall
 
 So in the release soon release often approach, I'm starting step-by-step. First make it run on x86_64. Then I will try to make it run on ARM on my Raspberry Pi 2. And then much later, I will think of adding a RTC component to my Pi.
 
+_Note: the current container has been successfully tested on host (x86_64) running Docker 1.12.1 on Ubuntu 16.04 (AppArmor activated) and CentOS 7 (SELinux enabled). However, it fails on Fedora 24 with Docker 1.10.3 from Fedora official repository, or with Docker 1.12.1 from Docker official repository. On Fedora the failure is due to SELinux in case of Docker 1.10.3, but creating a policy using `sudo ausearch -c 'ntpd' --raw | sudo audit2allow -M my-ntpd; sudo semodule -X 300 -i my-ntpd.pp` solved that, however then we hit the same problem than when using Docker 1.12.1 on Fedora, the ntpd process running in our container is disallowed permission to run ntp_adjtime and step-systime. But nothing is reported in the log for a reason the permission is denied. It is like the capabilities given to the container are ignored in Fedora. I need to create a bug report... Will update soon._
+
 Regarding the Pi, I've seen that Alpine Linux does not provide the ntp server from www.ntp.org but a variant named openntpd supported by the OpenBSD project. This is fully OK, but I know how to configure the ntp server from ntp.org, so I will start with that and first pick up another base image for the Raspberry Pi, probably Debian or Ubuntu (which ever is smaller).
 
 Building the image
