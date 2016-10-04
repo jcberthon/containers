@@ -9,7 +9,7 @@ I understand that in the end running a NTP server on a Raspberry Pi is not reall
 
 So in the release soon release often approach, I'm starting step-by-step. First make it run on x86_64. Then I will try to make it run on ARM on my Raspberry Pi 2. And then much later, I will think of adding a RTC component to my Pi.
 
-_Note: the current container has been successfully tested on host (x86_64) running Docker 1.12.1 on Ubuntu 16.04 (AppArmor activated), CentOS 7 (SELinux enabled) and Fedora 24 (SELinux enabled). You need to have docker version (>= 1.2.0 AND < 1.10) OR >= 1.12.0. If you have docker 1.10 or 1.11 you have the problem that it enforces a seccomp profile which disallow adjusting the host time from the container, eventhough the '--add-cap SYS_TIME' capability is defined. This was fixed in Docker 1.12.0 ([#22554](https://github.com/docker/docker/pull/22554)).  
+_Note: the current container has been successfully tested on host (x86_64) running Docker 1.12.1 on Ubuntu 16.04 (AppArmor activated), CentOS 7 (SELinux enabled) and Fedora 24 (SELinux enabled), and using Docker 1.9.1 on openSUSE Leap 42.1 (AppArmor activated). You need to have docker version (>= 1.2.0 AND < 1.10) OR >= 1.12.0. If you have docker 1.10 or 1.11 you have the problem that it enforces a seccomp profile which disallow adjusting the host time from the container, eventhough the '--add-cap SYS_TIME' capability is defined. This was fixed in Docker 1.12.0 ([#22554](https://github.com/docker/docker/pull/22554)).  
 I therefore recommend using Docker >= 1.12.1._
 
 Regarding the Pi, I've seen that Alpine Linux does not provide the ntp server from www.ntp.org but a variant named openntpd supported by the OpenBSD project. This is fully OK, but I know how to configure the ntp server from ntp.org, so I will start with that and first pick up another base image for the Raspberry Pi, probably Debian or Ubuntu (which ever is smaller).
@@ -17,7 +17,7 @@ Regarding the Pi, I've seen that Alpine Linux does not provide the ntp server fr
 Building the image
 ------------------
 
-As a prerequisite, you need to have Docker properly installed (https://docs.docker.com/engine/installation/). I'm running Docker 1.12, but it should work on older version of Docker as well, at least the building instructions.
+As a prerequisite, you need to have Docker properly installed (https://docs.docker.com/engine/installation/) and run your host on a x86_64 architecture. I'm running Docker 1.12, but it should work on older version of Docker as well (with the exception of versions 1.10 and 1.11 where you need to remove the seccomp profile when running this image), at least the building instructions. For other architectures (like 32 bit or ARM, etc. you would need to edit the Dockerfile and change the base image).
 
 To build it, simply run the command below (the command is the line starting with `$ ` but don't type those leading characters). You can of course replace `jcberthon/ntpd` by whatever name you wish to give your image.
 
