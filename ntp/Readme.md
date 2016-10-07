@@ -36,6 +36,12 @@ To build it, simply run the command below (the command is the line starting with
 
 *Note: Currently the default NTPd configuration (from Ubuntu 16.04) is being used, so it just make sure your system synchronise to a pool of remote NTP server, but it can't yet provide time on your local network. That's the next step.*
 
+Beta: you can try to compile it for your Raspberry Pi (or an ARMv7 for which Docker is available):
+
+    $ docker build -f Dockerfile.armhf -t jcberthon/ntpd .
+
+There is no change to the command line for running the container.
+
 Running the image
 -----------------
 
