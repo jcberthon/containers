@@ -22,8 +22,7 @@ WORKDIR $GHOST_SOURCE
 ENV GHOST_VERSION 0.11.1
 
 RUN buildDeps=' \
-		gcc \
-		make \
+		build-essential \
 		python \
 		unzip \
 	' \
