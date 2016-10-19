@@ -38,8 +38,15 @@ To build it, simply run the command below (the command is the line starting with
 Running the image
 -----------------
 
-The ntp daemon needs to modify the system time of the host kernel. In addition, the daemon tries to lock some of its memory to avoid being swapped. Therefore, we need to provide a few privileges to our container if we want the daemon to control the clock on the host. We are going to use Linux capabilites for that, the support for this feature was added back in Docker 1.2 (https://github.com/docker/docker/blob/v1.2.0/CHANGELOG.md).
+The ntp daemon needs to modify the system time of the host kernel. It is also a server running on port 123/UDP and therefore require privilege bind access. In addition, the daemon tries to lock some of its memory to avoid being swapped. Therefore, we need to provide a few privileges to our container if we want the daemon to control the clock on the host. We are going to use Linux capabilites for that, the support for this feature was added back in Docker 1.2 (https://github.com/docker/docker/blob/v1.2.0/CHANGELOG.md). And we will drop all other capabilities.
 
-    $ docker run --cap-add SYS_TIME --cap-add SYS_RESOURCE jcberthon/ntpd -g -n
+    $ docker run --name ntpd --cap-drop ALL --cap-add NET_BIND_SERVICE --cap-add SYS_TIME --cap-add SYS_RESOURCE jcberthon/ntpd -g -n -l /var/log/ntpd.log
 
 *Note: the container run in foreground mode with this option (option `-n`), this is important for Docker so that it can keep track of the process and knows when the container should exit or not.*
+
+In order to verify if your ntp server is running and if it is synchronised, you can use the `ntpq` command (see [ntpq man page](http://doc.ntp.org/4.2.8p4/ntpq.html) for more information).
+
+    $ docker exec -it ntpd ntpq -pn
+
+_Note: if you are just interested in trying out this container and run it in the foreground with logs displayed on the console, execute this instead: `docker run --rm -it --cap-drop ALL --cap-add NET_BIND_SERVICE --cap-add SYS_TIME --cap-add SYS_RESOURCE jcberthon/ntpd -g -n` and you can use Ctrl+C to stop the container. The container instance will be automatically deleted (due to the use of the `--rm` option)._
+
