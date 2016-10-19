@@ -35,6 +35,8 @@ To build it, simply run the command below (the command is the line starting with
 
 *Note: Currently the default NTPd configuration (from Ubuntu 16.04) is being used, so it just make sure your system synchronise to a pool of remote NTP server, but it can't yet provide time on your local network. That's the next step.*
 
+The image expose the port 123 (the default NTP port) to other containers.
+
 Running the image
 -----------------
 
@@ -50,3 +52,6 @@ In order to verify if your ntp server is running and if it is synchronised, you 
 
 _Note: if you are just interested in trying out this container and run it in the foreground with logs displayed on the console, execute this instead: `docker run --rm -it --cap-drop ALL --cap-add NET_BIND_SERVICE --cap-add SYS_TIME --cap-add SYS_RESOURCE jcberthon/ntpd -g -n` and you can use Ctrl+C to stop the container. The container instance will be automatically deleted (due to the use of the `--rm` option)._
 
+If you want to use the option `-N` (which tried to elevate the ntpd priority), with the above command you will get `set_process_priority: No way found to improve our priority`. The `ntpd` daemon will still be running, so it is not blocking, but if you want to add that capability, you need to add `--cap-add SYS_NICE` to the command line.
+
+If you want to use this ntp server on your network, you can also publish the port by using the option `--publish 123:123/udp`.
