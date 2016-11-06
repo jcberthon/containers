@@ -72,3 +72,12 @@ Simply execute this:
     $ docker run --name ntpd --cap-drop ALL --cap-add NET_BIND_SERVICE --cap-add SYS_TIME --cap-add SYS_RESOURCE --restart always --detach --publish 123:123/udp -v $PWD/ntp.conf:/etc/ntp.conf:ro jcberthon/armhf/ntpd -g -n
 
 That's it, you can use the same command as above to verify that your server is up and running. Not that you need to let it run for 2-4 hours so that the synchronisation is stabilised.
+
+Docker, ntpd and user namespace
+-------------------------------
+
+blablabla
+
+    $ docker run --name ntpd --userns host --cap-drop ALL --cap-add NET_BIND_SERVICE --cap-add SYS_TIME --cap-add SYS_RESOURCE --restart always --detach --publish 123:123/udp -v $PWD/ntp.conf:/etc/ntp.conf:ro jcberthon/armhf/ntpd -g -n
+
+
