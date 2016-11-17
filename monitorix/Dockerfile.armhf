@@ -1,0 +1,39 @@
+FROM armhf/ubuntu:16.04
+
+RUN apt-get update \
+    && apt-get install -y \
+		curl \
+		rrdtool \
+		perl \
+		libwww-perl libmailtools-perl libmime-lite-perl librrds-perl libdbi-perl libxml-simple-perl libhttp-server-simple-perl libconfig-general-perl libio-socket-ssl-perl \
+		iptables \
+		net-tools \
+		ntp \
+		libpango-1.0-0 \
+		less vim software-properties-common \
+    && apt-get clean -q \
+    && rm -Rf /var/lib/apt/lists/*
+
+RUN cd /tmp \
+    && curl -OL http://www.monitorix.org/monitorix_3.9.0-izzy1_all.deb \
+    && dpkg --install monitorix_3.9.0-izzy1_all.deb \
+    && rm -f monitorix_3.9.0-izzy1_all.deb
+
+RUN add-apt-repository ppa:ubuntu-raspi2/ppa \
+    && apt-get update \
+    && apt-get install -y \
+		libraspberrypi-bin \
+    && apt-get clean -q \
+    && rm -Rf /var/lib/apt/lists/*
+
+#RUN yum -y install supervisor && yum clean all
+
+#COPY supervisord.conf /etc/supervisord.d/supervisord.ini
+
+#CMD ["/usr/bin/supervisord"]
+
+EXPOSE 8080
+
+VOLUME ["/var/lib/monitorix/", "/var/lib/monitorix/www"]
+
+CMD ["/usr/bin/monitorix", "-n", "-c", "/etc/monitorix/monitorix.conf", "-p", "/run/monitorix.pid"]
