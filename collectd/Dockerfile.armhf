@@ -1,0 +1,8 @@
+FROM armhf/alpine:edge
+
+RUN apk add --no-cache collectd
+
+RUN apk add --no-cache collectd-network collectd-disk collectd-sensors
+
+ENTRYPOINT ["/usr/sbin/collectd", "-f"]
+
