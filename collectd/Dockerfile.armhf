@@ -4,5 +4,10 @@ RUN apk add --no-cache collectd
 
 RUN apk add --no-cache collectd-network collectd-disk collectd-sensors
 
+RUN apk add --no-cache libpcap
+
+RUN echo "http://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories && \
+    apk --no-cache add liboping
+
 ENTRYPOINT ["/usr/sbin/collectd", "-f"]
 
