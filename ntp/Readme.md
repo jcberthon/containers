@@ -81,3 +81,16 @@ blablabla
     $ docker run --name ntpd --userns host --cap-drop ALL --cap-add NET_BIND_SERVICE --cap-add SYS_TIME --cap-add SYS_RESOURCE --restart always --detach --publish 123:123/udp -v $PWD/ntp.conf:/etc/ntp.conf:ro jcberthon/armhf/ntpd -g -n
 
 
+
+Improving latency (experiment)
+------------------------------
+
+This is an on-going experiment in order to reduce latencies and thus improve time accuracy. I'm currently trying to use a low latency kernel (not the fully preemptible Kernel from the real time Linux project yet, but the vanilla Kernel option which allows more kernel regions to be preempted), playing with tickless and non-tickless options, etc. All of this is done on the host.
+
+I've configured the Raspberry Pi USB/Ethernet bridge to stop the turbo mode, so reducing throughput but augmenting latency.
+
+I have added an RTC to my Raspberry Pi (DS3231) to see if this would improve time accuracy, and I'm trying to pass the device to the container. In addition I'm trying if using the host network stack helps in squeasing out the last of the latencies I can.
+
+This is experimental and I'm still fighting with NTP to see which parameters to monitor, and fighting with monitoring tools (e.g. collectd, telegraf, prometheus) to get the correct parameters monitored in order to see if any change brings improvements or not. So far I need to use hand made scripts to perform the monitoring I want.
+
+Anyway, here is a list of options to consider for running the container: `--network host --device=/dev/rtc:/dev/rtc0:rw` 
