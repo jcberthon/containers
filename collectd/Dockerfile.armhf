@@ -2,12 +2,11 @@ FROM armhf/alpine:edge
 
 RUN apk add --no-cache collectd
 
-RUN apk add --no-cache collectd-network collectd-disk collectd-sensors
+RUN apk add --no-cache collectd-network collectd-disk collectd-sensors collectd-dns collectd-ping
 
-RUN apk add --no-cache libpcap
+#RUN apk add --no-cache libpcap
 
-RUN echo "http://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories && \
-    apk --no-cache add liboping
+RUN apk add --no-cache tcpdump
 
 ENTRYPOINT ["/usr/sbin/collectd", "-f"]
 

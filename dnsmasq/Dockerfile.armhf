@@ -1,0 +1,16 @@
+FROM armhf/ubuntu:16.04
+
+RUN apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get upgrade -y \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends dnsmasq \
+    && apt-get clean -q \
+    && rm -Rf /var/lib/apt/lists/*
+
+#RUN mkdir -p -m 0755 /etc/dnsmasq.d && chown root /etc/dnsmasq.d
+
+RUN mkdir -p /var/run/dnsmasq && touch /var/run/dnsmasq/resolv.conf
+
+EXPOSE 53 53/udp 67 67/udp 68 68/udp 69/udp 547 547/udp
+
+#ENTRYPOINT ["/usr/sbin/dnsmasq", "-k", "--log-facility=-", "--local-service", "--resolv-file=/var/run/dnsmasq/resolv.conf", "--conf-dir=/etc/dnsmasq.d,.dpkg-dist,.dpkg-old,.dpkg-new", "--log-async", "--quiet-dhcp", "--quiet-dhcp6", "--quiet-ra"]
+ENTRYPOINT ["/usr/bin/chrt", "-f", "50", "/usr/sbin/dnsmasq", "-k", "--log-facility=-", "--local-service", "--conf-dir=/etc/dnsmasq.d,.dpkg-dist,.dpkg-old,.dpkg-new", "--log-async", "--quiet-dhcp", "--quiet-dhcp6", "--quiet-ra"]
